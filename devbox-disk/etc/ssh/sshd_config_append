@@ -1,0 +1,4 @@
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+GatewayPorts yes
+PermitTunnel no

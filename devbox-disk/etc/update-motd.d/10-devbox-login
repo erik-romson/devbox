@@ -1,0 +1,10 @@
+#!/bin/bash
+ echo;
+    echo You are now logged in to;
+    figlet $(hostname);
+    cat  <<EOF
+
+Mapped docker ports: $(cat /etc/docker.ports)
+
+Host c-drive is mounted to /mnt/c/
+EOF

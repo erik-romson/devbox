@@ -1,0 +1,5 @@
+TERM=xterm-256color
+TZ=Europe/Oslo
+LANG=nb_NO.UTF-8
+LC_ALL=nb_NO.UTF-8
+DISPLAY=10.0.75.1:0

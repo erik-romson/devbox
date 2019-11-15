@@ -1,0 +1,44 @@
+
+#####################################
+# DEVBOX Extras
+#####################################
+
+## Prompt setup in the format D:<working dir> (<pom version>|<git branch>)
+
+find-pom () {
+  path=$(pwd)
+  while [[ "$path" != "" && ! -e "$path/pom.xml" ]]; do
+    path=${path%/*}
+  done
+  echo "$path/pom.xml"
+}
+
+pom_version() {
+	POM=$(find-pom)
+	if [ -f "$POM" ];then
+		POM_VER=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -m p:project -v p:version $POM | sed -e 's/-SNAPSHOT//')
+		if [ "" = "$POM_VER" ];then
+			POM_VER=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -m p:project/p:parent -v p:version $POM | sed -e 's/-SNAPSHOT//')
+		fi
+		echo $POM_VER
+	fi
+}
+
+parse_git_branch() { git branch 2> /dev/null | sed -e 's/master/m/' -e '/^[^*]/d' -e 's/* \(.*\)/\1/'; }
+
+project_info() {
+	GB=$(parse_git_branch)
+	PI=$(pom_version)
+
+	if [ ! "" = "$PI$GB" ];then
+		if [ "" = "$PI" -o "" = "$GB" ];then
+			SEP=""
+		else
+			SEP="|"
+		fi		
+		echo -e " ($PI$SEP\001\033[01;94m\0002$GB\001\033[01;36m\002)"
+	fi
+
+}
+
+export PS1="\[\e]0;\u@\h: \w\a\]\[\033[01;32m\]D\[\033[0m\]:\[\033[01;33m\]\w\[\033[0m\]\[\033[01;36m\]\$(project_info)\[\033[0m\] # "

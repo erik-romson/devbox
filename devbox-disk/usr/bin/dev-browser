@@ -1,0 +1,11 @@
+#!/bin/bash
+
+nc -z 10.0.75.1 3333 # Check if browser deamon is running
+case $? in
+    0)
+        echo "$@" | sed -e s/localhost/devbox/ | nc -q1 10.0.75.1 3333
+        ;;
+    *)
+        /usr/bin/xdg-open $@        
+        ;;
+esac

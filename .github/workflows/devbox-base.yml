@@ -1,0 +1,19 @@
+name: Build devbox-base
+on:
+  push:
+    paths:
+    - 'Dockerfile'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: oysteinlunde/devbox/devbox-base
+        dockerfile: Dockerfile
+        username: oysteinlunde
+        password: ${{ secrets.REPO_TOKEN }}
+        registry: docker.pkg.github.com
+        cache: true

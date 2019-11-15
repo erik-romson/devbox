@@ -1,0 +1,7 @@
+#!/bin/sh
+
+SCRIPT_NAME=digest.sh
+EXECUTABLE_CLASS=org.jasypt.intf.cli.JasyptStringDigestCLI
+EXEC_CLASSPATH="/usr/share/maven-repo/org/jasypt/jasypt/debian/jasypt-debian.jar"
+
+java -classpath $EXEC_CLASSPATH $EXECUTABLE_CLASS $SCRIPT_NAME "$@"

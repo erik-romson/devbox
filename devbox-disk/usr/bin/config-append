@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Merge append-files to their peers.
+#
+# Example:
+#
+# If the following files are found in /etc:
+#
+#     bash.bashrc
+#     bash.bashrc_append
+#
+# then running this script will append the content of the latter file to the former and delete the latter,
+# effectivly merging the files
+#
+find /etc /root /usr -name "*_append" | sed -e s/_append// | xargs -iFILE sh -c "echo Appending FILE ...;cat FILE_append >> FILE;rm FILE_append"
