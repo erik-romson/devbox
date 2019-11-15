@@ -14,6 +14,6 @@ jobs:
         name: oysteinlunde/devbox/devbox-base
         dockerfile: Dockerfile
         username: oysteinlunde
-        password: ${{ secrets.REPO_TOKEN }}
+        password: ${{ secrets.GITHUB_IDEA_TOKEN }}
         registry: docker.pkg.github.com
         cache: true
