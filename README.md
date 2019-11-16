@@ -12,13 +12,7 @@ The following software is included in the base image:
 
 ### Tools for software development
 
-* Jetbrains IDEA
-* OpenJDK
-* Git
-* Maven
-* Docker
-
-Additional tools supporting development: git, gitk, tig, python, firefox, curl, tcpdump, nmap, netcat, lsof, ngrep, strace
+Tools supporting development: git, gitk, tig, python, firefox, curl, tcpdump, nmap, netcat, lsof, ngrep, strace
 
 ### Other linux tools
 Other tools: man, nano, vim, tmux, htop, atop, mc, jq ssh, pv, xmldiff, sshfs, konsole, xterm
