@@ -22,7 +22,7 @@ For the full list of included sw, se the [Dockerfile](Dockerfile)
 # Simple Quick Start
 If you just wat to try it out, pull and start the image with the following docker command:
 
-    docker run --privileged --rm -d -it -h devbox -p 127.0.0.2:22:22 -p 127.0.0.2:8080:8080 -p 127.0.0.2:7777:7777 --add-host=pc:10.0.75.1 -e PORTS="22 7777 8080 9090" -e DEVBOXUSER=ourusername -v /var/run/docker.sock:/var/run/docker.sock -v /c:/mnt/c:consistent -v devbox-home:/home --name devbox-base docker.pkg.github.com/oysteinlunde/devbox/devbox-base:latest
+    docker run --privileged --rm -d -it -h devbox -p 127.0.0.2:22:22 -p 127.0.0.2:8080:8080 -p 127.0.0.2:7777:7777 --add-host=pc:10.0.75.1 -e PORTS="22 7777 8080 9090" -e DEVBOXUSER=ourusername -v /var/run/docker.sock:/var/run/docker.sock -v /c:/mnt/c:consistent -v devbox-home:/home --name devbox docker.pkg.github.com/oysteinlunde/devbox/devbox:latest
 
 Then open a web tty in you browser at the address [http://127.0.0.2:7777](http://127.0.0.2:7777). If you have a X11 server 
 on your host, you can start  `firefox` or `konsole` to verify that X11 is working. 
