@@ -11,7 +11,7 @@ jobs:
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: oysteinlunde/devbox/devbox-base
+        name: oysteinlunde/devbox/devbox
         dockerfile: Dockerfile
         username: oysteinlunde
         password: ${{ secrets.GITHUB_IDEA_TOKEN }}
