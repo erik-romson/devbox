@@ -141,4 +141,3 @@ RUN /usr/bin/config-append
 # Bootstrap image
 #=============================================
 ENTRYPOINT bash -c /usr/bin/container-init.sh
-
