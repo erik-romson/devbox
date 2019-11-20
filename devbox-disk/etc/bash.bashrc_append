@@ -6,6 +6,6 @@
 export EDITOR='vim'
 
 [ -f ~/.bash_local ] &&  . ~/.bash_local
-[ "$EUID" -ne 0 ] && [ ! -f ~/.gitconfig ] && /usr/bin/init-git.sh
+#[ "$EUID" -ne 0 ] && [ ! -f ~/.gitconfig ] && /usr/bin/init-git.sh
 
 . /etc/profile.d/.bash_aliases

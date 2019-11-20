@@ -1,5 +1,5 @@
 #!/bin/bash
-source container-props.ini 
+source container-props.ini
 
 #echo "set CONTAINER=$CONTAINER" > $SCRIPT_DIR/cmd/container-props.cmd
 
@@ -18,11 +18,11 @@ fi
 if [ "$1" = "-l" ];then
 	IMAGE=$CONTAINER:latest
 	if [[ "$(docker images -q $IMAGE 2> /dev/null)" == "" ]]; then
-  		echo "Docker image '$IMAGE' not found. You have to build a local image before running it."	  		
+  		echo "Docker image '$IMAGE' not found. You have to build a local image before running it."
   	else
-  		echo "Using locally build image '$IMAGE'"	  		
+  		echo "Using locally build image '$IMAGE'"
 	fi
-	
+
 fi
 
 # Map EXPOSED ports from container
@@ -34,7 +34,7 @@ done
 # Add extra hosts to container /etc/hosts
 IFS=',' HOST_LIST=($HOSTS)
 for HOST_ITEM in "${HOST_LIST[@]}"
-do		
+do
 	HOST_MAPS="--add-host=$HOST_ITEM $HOST_MAPS"
 	echo $HOST_MAPS
 done
@@ -56,12 +56,19 @@ echo
 echo Docker image $CONTAINER started
 echo
 
-./init-ssh.sh
+$SCRIPT_DIR/login.sh
 
-for SERVER in devbox $DEVBOX_IP
-do
-	ssh-keygen -q -f "/home/$USER/.ssh/known_hosts" -R $SERVER &> /dev/null
-	ssh -o StrictHostKeyChecking=no $SERVER exit &> /dev/null
-done
+#docker exec --user $USER -t -i devbox /usr/bin/ttyd-boot.sh
 
-ssh -q $DEVBOX_IP
+#./init-ssh.sh
+
+#for SERVER in devbox $DEVBOX_IP
+#do
+#	ssh-keygen -q -f "/home/$USER/.ssh/known_hosts" -R $SERVER &> /dev/null
+#	ssh -o StrictHostKeyChecking=no $SERVER exit &> /dev/null
+#done
+
+#
+# Logging into devbox
+#
+#ssh -q $DEVBOX_IP

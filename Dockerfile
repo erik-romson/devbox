@@ -6,7 +6,7 @@ EXPOSE 22 7200 7777 8080 9090 3000
 ENV TERM=xterm-256color
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN chown root:root /tmp && chmod ugo+rwXt /tmp    
+RUN chown root:root /tmp && chmod ugo+rwXt /tmp
 
 RUN apt-get clean && \
     apt-get update && \
@@ -34,7 +34,7 @@ RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender
 #=============================================
 # Networking tools
 #=============================================
-RUN apt-get install -qqy curl telnet tcpdump nmap iputils-ping traceroute whois net-tools dnsutils netcat lsof ngrep sshfs cifs-utils 
+RUN apt-get install -qqy curl telnet tcpdump nmap iputils-ping traceroute whois net-tools dnsutils netcat lsof ngrep sshfs cifs-utils
 
 #=============================================
 # Add sudo
@@ -93,10 +93,9 @@ RUN apt-get install -y locales tzdata && \
     locale-gen nb_NO.UTF-8 && \
     dpkg-reconfigure -f noninteractive tzdata
 
-#=============================================
-# Copy and update misc config
-#=============================================
-COPY devbox-disk /
+RUN wget -nv https://packagecloud.io/AtomEditor/atom/gpgkey -O /tmp/AtomEditor_atom.pub.gpg \
+    && wget -nv https://dl-ssl.google.com/linux/linux_signing_key.pub -O /tmp/google.pub.gpg \
+    && wget -nv https://download.docker.com/linux/ubuntu/gpg -O /tmp/docker.pub.gpg
 
 RUN apt-key add /tmp/google.pub.gpg \
     && apt-key add /tmp/docker.pub.gpg \
@@ -127,15 +126,40 @@ RUN fc-cache -fv && \
 RUN apt-get install -y samba
 
 #=============================================
+# Build and install ttyd
+#=============================================
+RUN apt-get install -y cmake g++ pkg-config git vim-common libwebsockets-dev libjson-c-dev libssl-dev \
+    && cd /tmp \
+    && git clone https://github.com/tsl0922/ttyd.git \
+    && cd ttyd && mkdir build && cd build \
+    && cmake .. \
+    && make && make install
+
+#=============================================
+# Misc tools
+#=============================================
+#RUN add-apt-repository -y ppa:x4121/ripgrep && apt-get -y install ripgrep
+RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb && sudo dpkg -i ripgrep_11.0.2_amd64.deb
+RUN cd /tmp && git clone --depth 1 https://github.com/junegunn/fzf.git && /tmp/fzf/install --bin && cp /tmp/fzf/bin/fzf /usr/bin/fzf
+RUN apt-get install -y most tig
+
+#=============================================
 # Set root pwd
 #=============================================
 RUN echo "root:root" | chpasswd
+
+#=============================================
+# Copy and update misc config
+#=============================================
+
+COPY devbox-disk /
 
 #=============================================
 # Post process copied files
 #=============================================
 RUN chmod go-w /usr /usr/bin && find /usr/bin/ -name "*" -exec chmod a+x {} \;
 RUN /usr/bin/config-append
+RUN rm -rf /tmp/*
 
 #=============================================
 # Bootstrap image
