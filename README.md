@@ -14,10 +14,10 @@ The following software is included in the base image:
 
 ### Tools for software development
 
-Tools supporting development: git, tig, python, firefox, curl, tcpdump, nmap, netcat, lsof, ngrep, strace
+Tools supporting development: git, tig, python, golang, java, nodejs, firefox, curl
 
 ### Other linux tools
-Other tools: man, nano, vim, tmux, htop, atop, mc, jq ssh, pv, xmldiff, sshfs, konsole, xterm
+Other tools: man, nano, vim, tmux, htop, atop, mc, jq ssh, pv, xmldiff, sshfs, konsole, xterm, tcpdump, nmap, netcat, lsof, ngrep, strace
 
 For the full list of included sw, se the [Dockerfile](Dockerfile)
 
