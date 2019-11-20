@@ -1,18 +1,20 @@
 # About devbox
 
 Devbox is an experimental image to be used as base image for development environments needing GUI. To serve this purpose, 
-the base images includes the full stack needed to run X11 client applications. You still need a X11 server. If you are 
-using Windows 10, we recommend [VcXsrv](https://sourceforge.net/projects/vcxsrv/). The most stable version we have found
-is [version 1.19.5.1](https://sourceforge.net/projects/vcxsrv/files/vcxsrv/1.19.5.1/).
-  
-Devbox is based on Ubuntu 19.04 and includes what you need to run X11 client applications.
+the base images includes the full stack needed to run X11 client applications. Devbox is based on Ubuntu 19.04 and includes what you need to run X11 client applications.
 
+### X11 server
+Even though devBox provided for the docker image to run GUI application, you still need a X11 server. If you are using Windows 10, we recommend [VcXsrv](https://sourceforge.net/projects/vcxsrv/). The most stable version we have found
+is [version 1.19.5.1](https://sourceforge.net/projects/vcxsrv/files/vcxsrv/1.19.5.1/). Start the X11 server with the following cmd:
+
+    vcxsrv.exe  :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl +xinerama -noprimary
+  
 # Software included
 The following software is included in the base image:
 
 ### Tools for software development
 
-Tools supporting development: git, gitk, tig, python, firefox, curl, tcpdump, nmap, netcat, lsof, ngrep, strace
+Tools supporting development: git, tig, python, firefox, curl, tcpdump, nmap, netcat, lsof, ngrep, strace
 
 ### Other linux tools
 Other tools: man, nano, vim, tmux, htop, atop, mc, jq ssh, pv, xmldiff, sshfs, konsole, xterm
@@ -37,22 +39,16 @@ The following linux scripts are included for devbox management (on windows these
 `stop.sh`
 : Stops the devbox container
 
-`restart.sh`
-: Restarts the devbox container
-
-`init-ssh.sh`
-: Set up keybased auth for the devbox container. This script is triggered by the start script.
-
 `build.sh`
 : Builds the devbox docker imgage locally.
 
-`init-wsl.sh`
-: Bootstrap script for initiating docker-cd in Windows Service Layer (WSL on Win10) 
+`login.sh`
+: Start a new bash sessin inside devBox 
 
 # Running devbox
 When starting devbox with the `start.sh` script, the docker persistent volume `devbox-home` directory is mounted to `/home`. 
-If the volume does not exist, it is created. A new linux user is then created and given `/home/<username>` as home directory. 
-The user is set up with key-based ssh-authentication (username=pw for fallback). 
+If the volume does not exist, it is created. A new linux user is then created and given `/home/<username>` as home directory 
+(username is resovled from the host OIS system environment). The devBox is set up with key-based ssh-authentication (username=pw for fallback). 
 
 The exposed ports in devbox image are bound to 127.0.0.2 on the host, eg. 127.0.0.2:22 for sshd. It is recommended to 
 name 127.0.0.2 to devbox is the `/etc/hosts` file on the docker host so logging in to devbox can be done by name: `ssh devbox`.
@@ -69,13 +65,13 @@ fork this project and use devbox-base as parent image. Create a new Dockerfile t
 image and add project spesific stuff:
 
 ```
-FROM docker.pkg.github.com/oysteinlunde/devbox/devbox-base:latest
+FROM docker.pkg.github.com/oysteinlunde/devbox/devbox:latest
 
 #=============================================
 # Exposed ports will automatically be bound 
 # to 127.0.0.2 when running the image
 #=============================================
-EXPOSE 22 8080 
+EXPOSE 22 8080 7777
 
 #=============================================
 # Copy files into the image
