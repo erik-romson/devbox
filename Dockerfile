@@ -51,8 +51,8 @@ RUN apt-get install -y openjdk-12-jdk
 #=============================================
 RUN add-apt-repository ppa:longsleep/golang-backports && \
     apt-get update && \
-    apt-get install -y golang-1.13 && \
-    go get github.com/erning/gorun
+    apt-get install -y golang-1.13
+    #&& \ go get github.com/erning/gorun
 
 #=============================================
 # Install nodejs
