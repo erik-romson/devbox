@@ -22,7 +22,6 @@ if [ "$1" = "-l" ];then
   	else
   		echo "Using locally build image '$IMAGE'"
 	fi
-
 fi
 
 # Map EXPOSED ports from container
@@ -43,6 +42,8 @@ IFS=$' \t\n'
 # Pull latest image from actifactory
 if [ "$1" != "-o" -a "$1" != "-l" ];then
 	echo "Pulling image from $IMAGE"
+	docker pull $IMAGE
+	source container-props.ini
 fi
 
 # Run image
