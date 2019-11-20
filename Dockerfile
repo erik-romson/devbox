@@ -29,12 +29,35 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes && \
 #=============================================
 # Misc libs and tools
 #=============================================
-RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender-dev libxtst-dev xclip man nano vim software-properties-common tmux htop dos2unix mc gnome-keyring figlet jq strace atop rpm python-actdiag python-blockdiag python-seqdiag python-nwdiag graphviz inotify-tools pv xmlstarlet xmldiff q-text-as-data m4 tree silversearcher-ag libxml2-utils libwebsockets-dev
+RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender-dev libxtst-dev xclip man nano vim software-properties-common tmux htop dos2unix mc gnome-keyring figlet jq strace atop rpm python3-pip python-pip graphviz inotify-tools pv xmlstarlet xmldiff q-text-as-data m4 tree silversearcher-ag libxml2-utils libwebsockets-dev
 
 #=============================================
 # Networking tools
 #=============================================
 RUN apt-get install -qqy curl telnet tcpdump nmap iputils-ping traceroute whois net-tools dnsutils netcat lsof ngrep sshfs cifs-utils
+
+#=============================================
+# GIT
+#=============================================
+RUN apt-get -y install git bash-completion git-flow gitk tig
+
+#=============================================
+# Install java12
+#=============================================
+RUN apt-get install -y openjdk-12-jdk
+
+#=============================================
+# Install go
+#=============================================
+RUN add-apt-repository ppa:longsleep/golang-backports && \
+    apt-get update && \
+    apt-get install -y golang-1.13 && \
+    go get github.com/erning/gorun
+
+#=============================================
+# Install nodejs
+#=============================================
+RUN apt-get install -y nodejs npm
 
 #=============================================
 # Add sudo
@@ -47,11 +70,6 @@ RUN apt-get install -y cifs-utils sudo && \
 #=============================================
 RUN apt-get install -y openssh-server && \
     sed -i -e s/prohibit-password/yes/ /etc/ssh/sshd_config
-
-#=============================================
-# GIT
-#=============================================
-RUN apt-get -y install git bash-completion git-flow gitk tig
 
 #=============================================
 # Terminal emulators
@@ -128,7 +146,7 @@ RUN apt-get install -y samba
 #=============================================
 # Build and install ttyd
 #=============================================
-RUN apt-get install -y cmake g++ pkg-config git vim-common libwebsockets-dev libjson-c-dev libssl-dev \
+RUN apt-get install -y cmake g++ pkg-config vim-common libwebsockets-dev libjson-c-dev libssl-dev \
     && cd /tmp \
     && git clone https://github.com/tsl0922/ttyd.git \
     && cd ttyd && mkdir build && cd build \
@@ -138,9 +156,11 @@ RUN apt-get install -y cmake g++ pkg-config git vim-common libwebsockets-dev lib
 #=============================================
 # Misc tools
 #=============================================
-#RUN add-apt-repository -y ppa:x4121/ripgrep && apt-get -y install ripgrep
+# ripgrep
 RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb && sudo dpkg -i ripgrep_11.0.2_amd64.deb
+# fzf
 RUN cd /tmp && git clone --depth 1 https://github.com/junegunn/fzf.git && /tmp/fzf/install --bin && cp /tmp/fzf/bin/fzf /usr/bin/fzf
+# most & tig
 RUN apt-get install -y most tig
 
 #=============================================
