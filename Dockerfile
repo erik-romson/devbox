@@ -4,7 +4,9 @@ EXPOSE 22 7200 7777 8080 9090 3000
 
 # Env config
 ENV TERM=xterm-256color
-ENV DEBIAN_FRONTEND=noninteractive
+
+# Build args
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN chown root:root /tmp && chmod ugo+rwXt /tmp
 
@@ -29,22 +31,28 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes && \
 #=============================================
 # Misc libs and tools
 #=============================================
-RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender-dev libxtst-dev xclip man nano vim software-properties-common tmux htop dos2unix mc gnome-keyring figlet jq strace atop rpm python3-pip python-pip graphviz inotify-tools pv xmlstarlet xmldiff q-text-as-data m4 tree silversearcher-ag libxml2-utils libwebsockets-dev
+RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender-dev libxtst-dev xclip man nano vim software-properties-common \
+    tmux htop dos2unix mc gnome-keyring figlet jq strace atop rpm python3-pip python-pip graphviz inotify-tools pv xmlstarlet xmldiff \
+    q-text-as-data m4 tree silversearcher-ag libxml2-utils libwebsockets-dev konsole most tig && \
+    apt-get clean
 
 #=============================================
 # Networking tools
 #=============================================
-RUN apt-get install -qqy curl telnet tcpdump nmap iputils-ping traceroute whois net-tools dnsutils netcat lsof ngrep sshfs cifs-utils
+RUN apt-get install -qqy curl telnet tcpdump nmap iputils-ping traceroute whois net-tools dnsutils netcat lsof ngrep sshfs cifs-utils && \
+    apt-get clean
 
 #=============================================
 # GIT
 #=============================================
-RUN apt-get -y install git bash-completion git-flow gitk tig
+RUN apt-get -y install git bash-completion git-flow gitk tig && \
+    apt-get clean
 
 #=============================================
 # Install java12
 #=============================================
-RUN apt-get install -y openjdk-12-jdk
+RUN apt-get install -y openjdk-12-jdk && \
+    apt-get clean
 
 #=============================================
 # Install go
@@ -59,7 +67,8 @@ RUN add-apt-repository ppa:longsleep/golang-backports && \
 #=============================================
 # Install nodejs
 #=============================================
-RUN apt-get install -y nodejs npm
+RUN apt-get install -y nodejs npm && \
+    apt-get clean
 
 #=============================================
 # Add sudo
@@ -73,10 +82,6 @@ RUN apt-get install -y cifs-utils sudo && \
 RUN apt-get install -y openssh-server && \
     sed -i -e s/prohibit-password/yes/ /etc/ssh/sshd_config
 
-#=============================================
-# Terminal emulators
-#=============================================
-RUN apt-get install -y konsole
 
 #=============================================
 # Firefox
@@ -92,7 +97,8 @@ RUN apt-get -y install bzip2 dbus-x11 && \
     tar -C /opt -xjf /tmp/firefox.tar.bz2 && \
     rm /tmp/firefox.tar.bz2 && \
     mv /opt/firefox /opt/firefox-$FIREFOX_VERSION && \
-    ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
+    ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox && \
+    apt-get clean
 
 #=============================================
 # Docker-ce, allow running docker in docker
@@ -102,7 +108,8 @@ RUN apt install -y apt-transport-https ca-certificates curl gnupg-agent software
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu disco stable" && \
     apt-get update && \
-    apt-get install -y  docker-ce
+    apt-get install -y  docker-ce && \
+    apt-get clean
 
 #=============================================
 # Timezone and locale
@@ -115,11 +122,12 @@ RUN apt-get install -y locales tzdata && \
 
 RUN wget -nv https://packagecloud.io/AtomEditor/atom/gpgkey -O /tmp/AtomEditor_atom.pub.gpg \
     && wget -nv https://dl-ssl.google.com/linux/linux_signing_key.pub -O /tmp/google.pub.gpg \
-    && wget -nv https://download.docker.com/linux/ubuntu/gpg -O /tmp/docker.pub.gpg
-
-RUN apt-key add /tmp/google.pub.gpg \
+    && wget -nv https://download.docker.com/linux/ubuntu/gpg -O /tmp/docker.pub.gpg \
+	&& apt-key add /tmp/google.pub.gpg \
     && apt-key add /tmp/docker.pub.gpg \
-    && apt-get clean && apt-get update \
+    && apt-get clean \
+    && apt-get update \
+    && apt-get clean \
     && rm /tmp/*.pub.gpg
 
 #=============================================
@@ -154,6 +162,7 @@ RUN apt-get install -y cmake g++ pkg-config vim-common libwebsockets-dev libjson
     && cd ttyd && mkdir build && cd build \
     && cmake .. \
     && make && make install
+    && rm -rf /tmp/ttyd
 
 #=============================================
 # Misc tools
@@ -161,9 +170,7 @@ RUN apt-get install -y cmake g++ pkg-config vim-common libwebsockets-dev libjson
 # ripgrep
 RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb && sudo dpkg -i ripgrep_11.0.2_amd64.deb
 # fzf
-RUN cd /tmp && git clone --depth 1 https://github.com/junegunn/fzf.git && /tmp/fzf/install --bin && cp /tmp/fzf/bin/fzf /usr/bin/fzf
-# most & tig
-RUN apt-get install -y most tig
+RUN cd /tmp && git clone --depth 1 https://github.com/junegunn/fzf.git && /tmp/fzf/install --bin && cp /tmp/fzf/bin/fzf /usr/bin/fzf && rm -rf /tmp/fzf
 
 #=============================================
 # Set root pwd
