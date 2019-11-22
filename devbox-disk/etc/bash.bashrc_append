@@ -4,6 +4,8 @@
 ################################
 
 export EDITOR='vim'
+export DISPLAY=host.docker.internal:0
+export MANPAGER=most
 
 [ -f ~/.bash_local ] &&  . ~/.bash_local
 #[ "$EUID" -ne 0 ] && [ ! -f ~/.gitconfig ] && /usr/bin/init-git.sh
