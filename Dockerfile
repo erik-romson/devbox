@@ -161,7 +161,7 @@ RUN apt-get install -y cmake g++ pkg-config vim-common libwebsockets-dev libjson
     && git clone https://github.com/tsl0922/ttyd.git \
     && cd ttyd && mkdir build && cd build \
     && cmake .. \
-    && make && make install
+    && make && make install \
     && rm -rf /tmp/ttyd
 
 #=============================================
