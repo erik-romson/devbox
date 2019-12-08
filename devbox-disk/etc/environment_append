@@ -2,3 +2,4 @@ TERM=xterm-256color
 TZ=Europe/Oslo
 LANG=nb_NO.UTF-8
 LC_ALL=nb_NO.UTF-8
+LIBGL_ALWAYS_INDIRECT=1
