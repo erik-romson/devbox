@@ -1,6 +1,8 @@
 #!/bin/bash
 source container-props.ini
 
+SCRIPT_FOR_USER=$USER
+
 #echo "set CONTAINER=$CONTAINER" > $SCRIPT_DIR/cmd/container-props.cmd
 
 if [ "$1" = "-h" ]; then
@@ -47,7 +49,8 @@ if [ "$1" != "-o" -a "$1" != "-l" ];then
 fi
 
 # Run image
-docker run --privileged --rm -d  -it -h devbox $PORT_MAPS $HOST_MAPS -e PORTS="$PORTS" -e DEVBOXUSER=$USER -v /var/run/docker.sock:/var/run/docker.sock -v /c:/mnt/c:consistent  -v $HOME_VOLUME:/home --name $CONTAINER $IMAGE
+#docker run --privileged --rm -d  -it -h devbox $PORT_MAPS $HOST_MAPS -e PORTS="$PORTS" -e DEVBOXUSER=$SCRIPT_FOR_USER -v /var/run/docker.sock:/var/run/docker.sock -v /c:/mnt/c:consistent  -v $HOME_VOLUME:/home --name $CONTAINER $IMAGE
+docker run --privileged --rm -d  -it -h devbox $PORT_MAPS $HOST_MAPS -e PORTS="$PORTS" -e "DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')" -e DEVBOXUSER=$SCRIPT_FOR_USER -v /var/run/docker.sock:/var/run/docker.sock   -v ~/.ssh:/home/$USER/.ssh -v $HOME_VOLUME:/home --name $CONTAINER $IMAGE
 
 echo Starting $CONTAINER ...
 
@@ -59,13 +62,13 @@ echo
 
 $SCRIPT_DIR/login.sh
 
-#docker exec --user $USER -t -i devbox /usr/bin/ttyd-boot.sh
+#docker exec --user $SCRIPT_FOR_USER -t -i devbox /usr/bin/ttyd-boot.sh
 
 #./init-ssh.sh
 
 #for SERVER in devbox $DEVBOX_IP
 #do
-#	ssh-keygen -q -f "/home/$USER/.ssh/known_hosts" -R $SERVER &> /dev/null
+#	ssh-keygen -q -f "/home/$SCRIPT_FOR_USER/.ssh/known_hosts" -R $SERVER &> /dev/null
 #	ssh -o StrictHostKeyChecking=no $SERVER exit &> /dev/null
 #done
 

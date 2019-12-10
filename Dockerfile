@@ -51,8 +51,10 @@ RUN apt-get -y install git bash-completion git-flow gitk tig && \
 #=============================================
 # Install java12
 #=============================================
-RUN apt-get install -y openjdk-12-jdk && \
+RUN apt-get install -y openjdk-11-jdk && \
     apt-get clean
+#RUN apt-get install -y openjdk-12-jdk && \
+#    apt-get clean
 
 #=============================================
 # Install go
@@ -189,6 +191,9 @@ COPY devbox-disk /
 RUN chmod go-w /usr /usr/bin && find /usr/bin/ -name "*" -exec chmod a+x {} \;
 RUN /usr/bin/config-append
 RUN rm -rf /tmp/*
+
+RUN apt-get install -y maven
+
 
 #=============================================
 # Bootstrap image
